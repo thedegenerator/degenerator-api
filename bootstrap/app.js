@@ -29,6 +29,7 @@ const providers = [
   'adonis-middleware/providers/AppMiddlewareProvider',
   'adonis-auth/providers/AuthManagerProvider',
   'adonis-jsonapi/providers/JsonApiProvider',
+
 ];
 
 /*
@@ -50,6 +51,7 @@ const aceProviders = [
   'adonis-commands/providers/GeneratorsProvider',
   'adonis-commands/providers/ReplProvider',
   'adonis-generators/providers/GeneratorsProvider',
+
 ];
 
 /*
