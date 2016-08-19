@@ -30,9 +30,4 @@ Route.any('/', function * (request, response) {
   });
 });
 
-const User = use('App/Model/User');
-Route.get('/users', function * (request, response) {
-  const users = yield User.all();
-
-  response.json(users.toJSON());
-});
+Route.get('/users/current', 'UserController.current').middleware('auth');
