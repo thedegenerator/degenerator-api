@@ -10,6 +10,9 @@ class UserController {
 
     response.jsonApi('User', users);
   }
+  * create(request, response) {
+    yield response.sendView('user.create');
+  }
 
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);

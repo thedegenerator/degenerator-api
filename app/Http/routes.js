@@ -16,6 +16,18 @@
 */
 
 const Route = use('Route');
+Route.any('/users', function * (request, response) {
+  response.json({
+    jsonapi: {
+      version: '1.0',
+    },
+    data: {
+    },
+    meta: {
+      uptime: process.uptime(),
+    },
+  });
+});
 
 Route.any('/', function * (request, response) {
   response.json({
