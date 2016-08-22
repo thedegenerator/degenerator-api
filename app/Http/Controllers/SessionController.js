@@ -1,6 +1,6 @@
 'use strict';
 const User = use('App/Model/User');
-const E = require('node-exception');
+const E = require('node-exceptions');
 const Hash = use('Hash');
 
 class SessionController {
@@ -10,23 +10,22 @@ class SessionController {
     try {
       const user = yield User.findBy('email', email);
       const passwordValid =    yield Hash.verify(password, user.password);
-      if (!passwordValid){
+      if (!passwordValid) {
         throw new E();
       }
 
 
       const token = yield request.auth.generate(user);
-      response.json({access_token: token})
+      response.json({ access_token: token });
     } catch (e) {
       response.status(401).json({
-        errors:[
+        errors: [
           {
             status: 401,
-            title:'User failed to login',
-          }.
-        ].
+            title: 'User failed to login',
+          },
+        ],
       });
-
     }
   }
 
