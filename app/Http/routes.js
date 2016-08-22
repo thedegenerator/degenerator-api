@@ -16,18 +16,9 @@
 */
 
 const Route = use('Route');
-Route.any('/users', function * (request, response) {
-  response.json({
-    jsonapi: {
-      version: '1.0',
-    },
-    data: {
-    },
-    meta: {
-      uptime: process.uptime(),
-    },
-  });
-});
+
+Route.post('/users', 'UserController.store');
+Route.post('/token', 'SessionController.store');
 
 Route.any('/', function * (request, response) {
   response.json({

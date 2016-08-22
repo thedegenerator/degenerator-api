@@ -1,33 +1,29 @@
 'use strict';
-
+const Hash = use('Hash');
 const User = use('App/Model/User');
 const attributes = ['email', 'password', 'username'];
 
 class UserController {
 
-  * index(request, response) {
-    const users = yield User.with('uploads').fetch();
-
-    response.jsonApi('User', users);
-  }
-  * create(request, response) {
-    yield response.sendView('user.create');
-  }
 
   * store(request, response) {
-    const input = request.jsonApi.getAttributesSnakeCase(attributes);
+    const { email, username, password } = request.jsonApi.getAttributesSnakeCase(attributes);
 
-    const user = yield User.create(Object.assign({}, input));
 
+    const user = yield User.create({
+      email,
+      username,
+      password: yield Hash.make(password),
+    });
     response.jsonApi('User', user);
   }
 
-  * current(request, response) {
-    const user = request.authUser;
-    user.related('uploads').load();
-
-    response.jsonApi('User', user);
-  }
+  // * current(request, response) {
+  //   const user = request.authUser;
+  //   user.related('uploads').load();
+  //
+  //   response.jsonApi('User', user);
+  // }
 
   * show(request, response) {
     const id = request.param('id');
@@ -43,19 +39,11 @@ class UserController {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
 
     const user = yield User.with('uploads').where({ id }).firstOrFail();
-    yield user.update(Object.assign({}, input));
+    yield user.update(input);
 
     response.send(user);
   }
 
-  * destroy(request, response) {
-    const id = request.param('id');
-
-    const user = yield User.query().where({ id }).firstOrFail();
-    yield user.delete();
-
-    response.status(204).send();
-  }
 
 }
 
