@@ -8,7 +8,7 @@ class UploadSchema extends Schema {
     this.create('uploads', (table) => {
       table.increments();
       table.string('title');
-      table.integer('degenThresh');
+      table.string('degenThresh');
       table.boolean('addHomepage');
       table.boolean('dither');
       table.boolean('emboss');

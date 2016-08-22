@@ -19,6 +19,7 @@ const Route = use('Route');
 
 Route.post('/users', 'UserController.store');
 Route.post('/token', 'SessionController.store');
+Route.post('/uploads', 'UploadController.store');
 
 Route.any('/', function * (request, response) {
   response.json({
