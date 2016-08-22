@@ -14,8 +14,8 @@ class SessionController {
         throw new E();
       }
 
-      return 'oooooooooOOOOhhh OK!!!!';
-      const token - yield request.auth.generate(user);
+
+      const token = yield request.auth.generate(user);
       response.json({access_token: token})
     } catch (e) {
       response.status(401).json({
