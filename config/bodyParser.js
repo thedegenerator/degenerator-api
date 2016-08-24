@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = {
+
+
   /*
   |--------------------------------------------------------------------------
   | Data Limit
@@ -76,7 +78,7 @@ module.exports = {
     | Whether or not to allow multiple file uploads.
     |
     */
-    multiple: true,
+    multiple: false,
 
     /*
     |--------------------------------------------------------------------------
@@ -100,6 +102,6 @@ module.exports = {
     | the maximum limit.
     |
     */
-    maxSize: '2mb',
+    maxSize: '10mb',
   },
 };

@@ -13,8 +13,7 @@ class UploadController {
 
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
-    const foreignKeys = {
-    };
+    const foreignKeys = {};
     const upload = yield Upload.create(Object.assign({}, input, foreignKeys));
 
     response.jsonApi('Upload', upload);
@@ -22,7 +21,9 @@ class UploadController {
 
   * show(request, response) {
     const id = request.param('id');
-    const upload = yield Upload.with().where({ id }).firstOrFail();
+    const upload = yield Upload.with().where({
+      id,
+    }).firstOrFail();
 
     response.jsonApi('Upload', upload);
   }
@@ -32,10 +33,11 @@ class UploadController {
     request.jsonApi.assertId(id);
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
-    const foreignKeys = {
-    };
+    const foreignKeys = {};
 
-    const upload = yield Upload.with().where({ id }).firstOrFail();
+    const upload = yield Upload.with().where({
+      id,
+    }).firstOrFail();
     yield upload.update(Object.assign({}, input, foreignKeys));
 
     response.send(upload);
@@ -44,7 +46,9 @@ class UploadController {
   * destroy(request, response) {
     const id = request.param('id');
 
-    const upload = yield Upload.query().where({ id }).firstOrFail();
+    const upload = yield Upload.query().where({
+      id,
+    }).firstOrFail();
     yield upload.delete();
 
     response.status(204).send();
