@@ -8,15 +8,10 @@ class UploadSchema extends Schema {
     this.create('uploads', (table) => {
       table.increments();
       table.string('title');
-      table.string('degenThresh');
-      table.boolean('addHomepage');
-      table.boolean('dither');
-      table.boolean('emboss');
-      table.boolean('sharpen');
-      table.boolean('blur');
-      table.boolean('implode');
-      table.boolean('cycle');
-      table.string('uploadFile');
+      table.string('threshold');
+      table.integer('user_id').references('users.id');
+      table.json('filters');
+      table.string('filename');
       table.timestamps();
     });
   }
