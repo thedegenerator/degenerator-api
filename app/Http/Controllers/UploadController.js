@@ -8,43 +8,46 @@ var uuid = require('node-uuid');
 class UploadController {
 
   *index(request, response) {
-    const uploads = yield Upload.with().fetch();
+    const uploads = yield Upload.with('user').fetch();
 
     response.jsonApi('Upload', uploads);
   }
 
-  * upload(request, response) {
-    // const { title, theshold, user_id, filter, filename } = request.jsonApi.getAttributesSnakeCase(attributes);
-    // const upload = yield Upload.create({
-    //   title,
-    //   theshold,
-    //   user_id,
-    //   filter,
-    //   filename,
-    // });
-    // response.jsonApi('Upload', upload);
-
+  * store(request, response) {
     // getting file instance
     const pic = request.file('uploadFile', {
       maxSize: '5mb',
       allowedExtensions: ['jpg', 'png', 'jpeg', 'gif'],
-      filters: ['blur:10', 'blur:200'],
     });
 
 
-    const fileName = `${uuid.v1()}.${pic.extension()}`;
-    response.send(pic.toJSON());
+    const filename = `${uuid.v1()}.${pic.extension()}`;
 
+    const attributes = {
+      filename,
+      user_id: request.authUser.id,
+      title: request.input('title'),
+      threshold: request.input('threshold'),
+      extension: pic.extension(),
+      filters: JSON.stringify(['blur:10']),
+    };
 
-    yield pic.move(Helpers.storagePath('./assets'), fileName);
-    if (!pic.moved()) {
-      response.badRequest(pic.errors());
-      return;
-    }
+    const [upload] = yield [Upload.create(attributes), pic.move(Helpers.storagePath('./assets'), filename)];
+    response.jsonApi('Upload', upload);
   }
 
 
   // * store(request, response) {
+  //   const { title, theshold, user_id, filter, filename } = request.jsonApi.getAttributesSnakeCase(attributes);
+  //   const upload = yield Upload.create({
+  //     title,
+  //     theshold,
+  //     user_id,
+  //     filter,
+  //     filename,
+  //   });
+  //   response.jsonApi('Upload', upload);
+  // }
   //   // var filters=[ blur:10 ];
   //   const { title, threshold } = request.all();
   //
@@ -61,15 +64,15 @@ class UploadController {
   // }
 
 
-  // * show(request, response) {
-  //   const id = request.param('id');
-  //   const upload = yield Upload.with().where({
-  //     id,
-  //   }).firstOrFail();
-  //
-  //   response.jsonApi('Upload', upload);
-  // }
-  //
+  * show(request, response) {
+    const id = request.param('id');
+    const upload = yield Upload.with().where({
+      id,
+    }).firstOrFail();
+
+    response.jsonApi('Upload', upload);
+  }
+
   // * update(request, response) {
   //   const id = request.param('id');
   //   request.jsonApi.assertId(id);

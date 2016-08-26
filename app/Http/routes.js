@@ -19,26 +19,33 @@ const Route = use('Route');
 
 Route.post('/users', 'UserController.store');
 Route.post('/token', 'SessionController.store');
-// Route.post('/uploads', 'UploadController.store');
-Route.post('/uploads', 'UploadController.upload');
-var fs = require('fs')
-  , gm = require('gm').subClass({ imageMagick: true });
-var Helpers = use('Helpers');
+Route.resource('/uploads', 'UploadController')
+  .middleware('auth')
+  .only('store', 'index', 'show');
 
-Route.get('image/:url.:extension', function * (request, response) {
-  const filepath = Helpers.storagePath(`./assets/${request.param('url')}.${request.param('extension')}`);
-  const tmpPath = Helpers.storagePath(`./assets/${request.param('url')}-1.${request.param('extension')}`);
+const fs = require('fs');
+const gm = require('gm').subClass({ imageMagick: true });
+const Helpers = use('Helpers');
+const Upload = use('App/Model/Upload');
+
+Route.get('/image/:url.:extension', function * (request, response) {
+  const id = request.param('url');
+  const upload = yield Upload.with().where({
+    id,
+  }).firstOrFail();
+
+  const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
+  const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
 
   const output = gm(filepath)
-
-// .lower(10*3,10*3)
-.median([7])
-.transparent(0, 255, 0)
-.cycle(20)
-.wave(-10, 4)
-.solarize(1)
-.swirl(180)
-// .implode(.1)
+    // .lower(10*3,10*3)
+    // .median([7])
+    // .transparent(0, 255, 0)
+    // .cycle(20)
+    .wave(-1, 10)
+    .emboss(2)
+    // .swirl(180)
+    // .implode(.1)
 
   .stream();
     // .write(filepath)

@@ -12,6 +12,7 @@ class UploadSchema extends Schema {
       table.integer('user_id').references('users.id');
       table.json('filters');
       table.string('filename');
+      table.string('extension');
       table.timestamps();
     });
   }
