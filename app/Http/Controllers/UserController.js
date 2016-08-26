@@ -18,12 +18,12 @@ class UserController {
     response.jsonApi('User', user);
   }
 
-  // * current(request, response) {
-  //   const user = request.authUser;
-  //   user.related('uploads').load();
-  //
-  //   response.jsonApi('User', user);
-  // }
+  * current(request, response) {
+    const user = request.authUser;
+    user.related('uploads').load();
+
+    response.jsonApi('User', user);
+  }
 
   * show(request, response) {
     const id = request.param('id');
