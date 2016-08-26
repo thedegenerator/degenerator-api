@@ -29,6 +29,7 @@
     "adonis-lucid": "^3.0.3",
     "adonis-middleware": "^1.0.7",
     "gm": "^1.23.0",
+    "node-uuid": "^1.4.7",
     "pg": "^6.1.0",
     "pg-native": "^1.10.0",
     "thunkify": "^2.1.2",
