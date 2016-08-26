@@ -9,14 +9,12 @@ class UploadSchema extends Schema {
       table.increments();
       table.string('title');
       table.string('degenThresh');
-      table.boolean('addHomepage');
       table.boolean('dither');
       table.boolean('emboss');
       table.boolean('sharpen');
       table.boolean('blur');
       table.boolean('implode');
       table.boolean('cycle');
-      table.string('uploadFile');
       table.timestamps();
     });
   }
