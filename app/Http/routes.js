@@ -24,11 +24,13 @@ Route.resource('/uploads', 'UploadController')
   .only('store', 'index', 'show');
 
 const fs = require('fs');
-const gm = require('gm').subClass({ imageMagick: true });
+const gm = require('gm').subClass({
+  imageMagick: true,
+});
 const Helpers = use('Helpers');
 const Upload = use('App/Model/Upload');
 
-Route.get('/image/:url.:extension', function * (request, response) {
+Route.get('/image/:url.:extension', function*(request, response) {
   const id = request.param('url');
   const upload = yield Upload.with().where({
     id,
@@ -39,16 +41,16 @@ Route.get('/image/:url.:extension', function * (request, response) {
 
   const output = gm(filepath)
     // .lower(10*3,10*3)
-    // .median([7])
-    // .transparent(0, 255, 0)
+    .median([7])
+    // .transparent(255, 255, 255)
     // .cycle(20)
-    .wave(-1, 10)
+    // .wave(-1, -10)
     .emboss(2)
-    // .swirl(180)
+    .swirl(10)
     // .implode(.1)
 
   .stream();
-    // .write(filepath)
+  // .write(filepath)
   output.pipe(response.response);
   const writeStream = fs.createWriteStream(tmpPath);
 
@@ -60,13 +62,12 @@ Route.get('/image/:url.:extension', function * (request, response) {
   output.pipe(writeStream);
 });
 
-Route.any('/', function * (request, response) {
+Route.any('/', function*(request, response) {
   response.json({
     jsonapi: {
       version: '1.0',
     },
-    data: {
-    },
+    data: {},
     meta: {
       uptime: process.uptime(),
     },
