@@ -20,8 +20,10 @@ const Route = use('Route');
 Route.post('/users', 'UserController.store');
 Route.post('/token', 'SessionController.store');
 Route.resource('/uploads', 'UploadController')
-  .middleware('auth')
-  .only('store', 'index', 'show');
+  .only('index', 'show');
+
+Route.post('/uploads', 'UploadController.store')
+  .middleware('auth');
 
 const fs = require('fs');
 const gm = require('gm').subClass({
