@@ -23,7 +23,7 @@ Route.resource('/uploads', 'UploadController')
   .only('index', 'show', 'update', 'destroy');
 
 Route.resource('/uploads', 'UploadController')
-  .only('store')
+  .only('store', 'destroy')
   .middleware('auth');
 
 Route.get('/image/:url-expose.:extension', 'ImageController.expose');
