@@ -8,7 +8,7 @@ class UploadSchema extends Schema {
     this.create('uploads', (table) => {
       table.increments();
       table.string('title');
-      table.string('threshold');
+      table.integer('threshold');
       table.integer('user_id').references('users.id');
       table.json('filters');
       table.string('filename');

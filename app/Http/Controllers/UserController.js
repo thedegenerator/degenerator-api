@@ -38,7 +38,7 @@ class UserController {
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
 
-    const user = yield User.with('uploads').findOrFail(id);
+    const user = yield User.with('uploads').where({ id }).firstOrFail();
     yield user.update(input);
 
     response.send(user);
