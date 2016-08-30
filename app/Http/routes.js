@@ -20,10 +20,10 @@ const Route = use('Route');
 Route.post('/users', 'UserController.store');
 Route.post('/token', 'SessionController.store');
 Route.resource('/uploads', 'UploadController')
-  .only('index', 'show');
+  .only('index', 'show', 'update');
 
 Route.resource('/uploads', 'UploadController')
-  .only('store', 'update')
+  .only('store')
   .middleware('auth');
 
 Route.get('/image/:url-expose.:extension', 'ImageController.expose');
