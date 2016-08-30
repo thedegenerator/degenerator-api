@@ -67,7 +67,17 @@ class UploadController {
     response.jsonApi('Upload', upload);
   }
 
+  * destroy(request, response) {
+    const id = request.param('id');
 
+    try {
+      const upload = yield Upload.find(id).firstOrFail();
+      yield upload.delete();
+    } catch (e) {
+    } finally {
+      response.status(204).send();
+    }
+  }
 }
 
 module.exports = UploadController;
