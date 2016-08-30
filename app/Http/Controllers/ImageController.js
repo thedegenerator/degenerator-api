@@ -4,7 +4,7 @@ const gm = require('gm').subClass({
 });
 const Helpers = use('Helpers');
 const Upload = use('App/Model/Upload');
-let views = 0;
+
 
 class ImageController {
   * preview(request, response) {
@@ -14,10 +14,11 @@ class ImageController {
     }).firstOrFail();
 
     const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
-    const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
 
     const output = gm(filepath)
-      .resize(200, 200)
+      .resize(200)
+      .colors(2)
+      .contrast(-11)
       .stream();
 
     output.pipe(response.response);
@@ -32,23 +33,15 @@ class ImageController {
     const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
     const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
 
-    const output = gm(filepath)
-      // .lower(10*3,10*3)
-      .median([7])
-      // .transparent(0, 0, 0)
-      // .cycle(20)
-      // .wave(-1, -10)
-      .emboss(2)
-      // .implode(.1)
+    const applyFilter = (image, filterType) => image[filterType](10);
 
-    .stream();
-    // .write(filepath)
+    const output = upload.filters.reduce(applyFilter, gm(filepath)).stream();
+
     output.pipe(response.response);
     const writeStream = fs.createWriteStream(tmpPath);
 
-    output.on('end', function () {
+    output.on('end',  () => {
       fs.renameSync(tmpPath, filepath);
-      console.log('BLURRY');
     });
 
     output.pipe(writeStream);

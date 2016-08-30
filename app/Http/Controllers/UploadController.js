@@ -36,7 +36,7 @@ class UploadController {
       title: request.input('title'),
       threshold: request.input('threshold'),
       extension: pic.extension(),
-      filters: JSON.stringify(['blur:10']),
+      filters: JSON.stringify(['.blur(10)']),
     };
 
     const [upload] = yield [Upload.create(attributes), pic.move(Helpers.storagePath('./assets'), filename)];
