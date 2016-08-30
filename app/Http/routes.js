@@ -20,7 +20,7 @@ const Route = use('Route');
 Route.post('/users', 'UserController.store');
 Route.post('/token', 'SessionController.store');
 Route.resource('/uploads', 'UploadController')
-  .only('index', 'show', 'update');
+  .only('index', 'show', 'update', 'destroy');
 
 Route.resource('/uploads', 'UploadController')
   .only('store')
