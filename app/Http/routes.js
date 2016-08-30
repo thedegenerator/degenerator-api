@@ -22,47 +22,12 @@ Route.post('/token', 'SessionController.store');
 Route.resource('/uploads', 'UploadController')
   .only('index', 'show');
 
-Route.post('/uploads', 'UploadController.store')
+Route.resource('/uploads', 'UploadController')
+  .only('store', 'update')
   .middleware('auth');
 
-const fs = require('fs');
-const gm = require('gm').subClass({
-  imageMagick: true,
-});
-const Helpers = use('Helpers');
-const Upload = use('App/Model/Upload');
-
-Route.get('/image/:url.:extension', function*(request, response) {
-  const id = request.param('url');
-  const upload = yield Upload.with().where({
-    id,
-  }).firstOrFail();
-
-  const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
-  const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
-
-  const output = gm(filepath)
-    // .lower(10*3,10*3)
-    .median([7])
-    // .transparent(255, 255, 255)
-    // .cycle(20)
-    // .wave(-1, -10)
-    .emboss(2)
-    .swirl(10)
-    // .implode(.1)
-
-  .stream();
-  // .write(filepath)
-  output.pipe(response.response);
-  const writeStream = fs.createWriteStream(tmpPath);
-
-  output.on('end', function () {
-    fs.renameSync(tmpPath, filepath);
-    console.log('BLURRY');
-  });
-
-  output.pipe(writeStream);
-});
+Route.get('/image/:url-expose.:extension', 'ImageController.expose');
+Route.get('/image/:url.:extension', 'ImageController.preview');
 
 Route.any('/', function*(request, response) {
   response.json({
