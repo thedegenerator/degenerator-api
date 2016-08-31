@@ -15,7 +15,9 @@ const attributes = [
 class UploadController {
 
   * index(request, response) {
-    const uploads = yield Upload.with('user').fetch();
+    const uploads = yield Upload.with('user')
+    .orderBy('id', 'desc')
+    .fetch();
 
     response.jsonApi('Upload', uploads);
   }

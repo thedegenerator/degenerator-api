@@ -48,6 +48,9 @@ class ImageController {
     });
 
     output.pipe(writeStream);
+
+    upload.hits++;
+    yield upload.save();
   }
 }
 
