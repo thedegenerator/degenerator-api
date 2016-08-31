@@ -8,6 +8,10 @@ class Upload extends Lucid {
     return this.belongsTo('App/Model/User');
   }
 
+  comments() {
+    return this.hasMany('App/Model/Comment');
+  }
+
 }
 
 module.exports = Upload;
