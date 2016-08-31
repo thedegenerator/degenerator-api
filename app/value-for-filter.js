@@ -16,6 +16,14 @@ module.exports = function getValForFilter(type, upload) {
       return 100 / upload.threshold;
     case 'paint':
       return .1 / upload.threshold;
+    case 'cycle':
+      return 100 / upload.threshold;
+    case 'edge':
+      return 100 / upload.threshold;
+    case 'solarize':
+      return 100 / upload.threshold;
+    case 'unsharp':
+      return 10 / upload.threshold;
     default:
       return 1 / upload.threshold;
   }
