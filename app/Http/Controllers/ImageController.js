@@ -5,6 +5,8 @@ const gm = require('gm').subClass({
 const Helpers = use('Helpers');
 const Upload = use('App/Model/Upload');
 
+const filterValue = use('App/value-for-filter');
+console.log(filterValue);
 
 class ImageController {
   * preview(request, response) {
@@ -18,7 +20,8 @@ class ImageController {
     const output = gm(filepath)
       .resize(200)
       .colors(2)
-      .contrast(-11)
+      .contrast(-10)
+
       .stream();
 
     output.pipe(response.response);
@@ -33,7 +36,7 @@ class ImageController {
     const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
     const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
 
-    const applyFilter = (image, filterType) => image[filterType](10);
+    const applyFilter = (image, filterType) => image[filterType](filterValue(filterType, upload));
 
     const output = upload.filters.reduce(applyFilter, gm(filepath)).stream();
 
