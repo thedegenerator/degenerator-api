@@ -15,7 +15,7 @@ const attributes = [
 class UploadController {
 
   * index(request, response) {
-    const uploads = yield Upload.with('user')
+    const uploads = yield Upload.with('user', 'comments')
     .orderBy('id', 'desc')
     .fetch();
 
@@ -49,7 +49,7 @@ class UploadController {
 
   * show(request, response) {
     const id = request.param('id');
-    const upload = yield Upload.with('user').where({
+    const upload = yield Upload.with('user', 'comments').where({
       id,
     }).firstOrFail();
 

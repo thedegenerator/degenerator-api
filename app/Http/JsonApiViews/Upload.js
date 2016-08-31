@@ -8,6 +8,10 @@ class Upload extends JsonApiView {
   user() {
     return this.belongsTo('App/Http/JsonApiViews/User');
   }
+
+  comments() {
+    return this.belongsTo('App/Http/JsonApiViews/Comment');
+  }
 }
 
 module.exports = Upload;
