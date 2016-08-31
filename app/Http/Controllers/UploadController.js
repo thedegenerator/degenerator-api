@@ -71,8 +71,9 @@ class UploadController {
     const id = request.param('id');
 
     try {
-      const upload = yield Upload.find(id).firstOrFail();
+      const upload = yield Upload.findOrFail(id);
       yield upload.delete();
+    } catch (e) {
     } finally {
       response.status(204).send();
     }
