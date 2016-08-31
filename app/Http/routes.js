@@ -42,3 +42,4 @@ Route.any('/', function*(request, response) {
 });
 
 Route.get('/users/current', 'UserController.current').middleware('auth');
+Route.resource('/comments', 'CommentController').middleware('auth').except(['create', 'edit']);
