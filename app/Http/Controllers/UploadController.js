@@ -41,8 +41,8 @@ class UploadController {
       filters: JSON.stringify(request.input('filters').split(',')),
     };
 
-
-    const [upload] = yield [Upload.create(attributes), pic.move(Helpers.storagePath('./assets'), filename)];
+    yield File.upload(filename, pic);
+    const upload = yield Upload.create(attributes);
     response.jsonApi('Upload', upload);
   }
 
