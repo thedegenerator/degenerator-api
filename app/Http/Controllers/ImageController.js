@@ -4,6 +4,8 @@ const gm = require('gm').subClass({
 });
 const Helpers = use('Helpers');
 const Upload = use('App/Model/Upload');
+const File = use('File');
+const Env = use('Env');
 
 const filterValue = use('App/value-for-filter');
 console.log(filterValue);
@@ -15,9 +17,9 @@ class ImageController {
       id,
     }).firstOrFail();
 
-    const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
+    const stream = File.getStream(upload.filename);
 
-    const output = gm(filepath)
+    const output = gm(stream, upload.filename)
       .resize(200)
       .colors(2)
       .contrast(-10)
@@ -33,21 +35,30 @@ class ImageController {
       id,
     }).firstOrFail();
 
-    const filepath = Helpers.storagePath(`./assets/${upload.filename}`);
-    const tmpPath = Helpers.storagePath(`./assets/tmp-${upload.filename}`);
+    const filepath = Helpers.storagePath(`./app/${upload.filename}`);
+    const tmpPath = Helpers.storagePath(`./app/tmp-${upload.filename}`);
 
     const applyFilter = (image, filterType) => image[filterType](filterValue(filterType, upload));
 
-    const output = upload.filters.reduce(applyFilter, gm(filepath)).stream();
+    const stream = File.getStream(upload.filename);
+
+    const st = gm(stream, upload.filename);
+
+    const output = upload.filters.reduce(applyFilter, st).stream();
 
     output.pipe(response.response);
-    const writeStream = fs.createWriteStream(tmpPath);
 
-    output.on('end',  () => {
-      fs.renameSync(tmpPath, filepath);
-    });
+    if (!Env.get('FILE_DRIVER') === 's3') {
+      const writeStream = fs.createWriteStream(tmpPath);
 
-    output.pipe(writeStream);
+      output.on('end',  () => {
+        fs.renameSync(tmpPath, filepath);
+      });
+
+      output.pipe(writeStream);
+    } else {
+      File.putStream(upload.filename, output);
+    }
 
     upload.hits++;
     yield upload.save();
