@@ -31,6 +31,8 @@ Http.handleError = function * (error, request, response) {
       });
   }
 
+  console.log(error);
+
   yield response.jsonApiError(error);
 };
 
