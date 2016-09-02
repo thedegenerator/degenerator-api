@@ -13,6 +13,7 @@ console.log(filterValue);
 class ImageController {
   * preview(request, response) {
     const id = request.param('url');
+    console.log(id);
     const upload = yield Upload.with().where({
       id,
     }).firstOrFail();
