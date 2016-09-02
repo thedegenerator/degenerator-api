@@ -48,7 +48,7 @@ class ImageController {
 
     output.pipe(response.response);
 
-    if (!Env.get('FILE_DRIVER') === 's3') {
+    if (Env.get('FILE_DRIVER') !== 's3') {
       const writeStream = fs.createWriteStream(tmpPath);
 
       output.on('end',  () => {
