@@ -23,8 +23,7 @@ class ImageController {
 
     const output = gm(stream, upload.filename)
       .resize(200)
-      .colors(2)
-      .contrast(-10)
+
 
       .stream();
 
