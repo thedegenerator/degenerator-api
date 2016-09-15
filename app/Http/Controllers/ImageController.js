@@ -13,7 +13,7 @@ console.log(filterValue);
 class ImageController {
   * preview(request, response) {
     const id = request.param('url');
-    console.log('id', id);
+    console.log('id', );
     console.log(id);
     const upload = yield Upload.with().where({
       id,
@@ -45,7 +45,9 @@ class ImageController {
 
     const st = gm(stream, upload.filename);
 
-    const output = upload.filters.reduce(applyFilter, st).stream();
+    const output = upload.filters.reduce(applyFilter, st)
+      .contrast(-10)
+    .stream();
 
     output.pipe(response.response);
 
